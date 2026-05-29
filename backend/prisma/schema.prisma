@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Book {
+  id              Int            @id @default(autoincrement()) @map("id")
+  isbn            String         @unique @db.VarChar(20)
+  title           String         @db.VarChar(200)
+  author          String         @db.VarChar(100)
+  category        String         @db.VarChar(50)
+  publisher       String         @db.VarChar(100)
+  price           Decimal        @db.Decimal(10, 2)
+  totalCopies     Int            @default(1) @map("total_copies")
+  availableCopies Int            @default(1) @map("available_copies")
+  publishDate     DateTime?      @map("publish_date") @db.Date
+  description     String?        @db.Text
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+  borrowRecords   BorrowRecord[]
+
+  @@map("book")
+}
+
+model Reader {
+  id          Int            @id @default(autoincrement()) @map("id")
+  readerNo    String         @unique @map("reader_no") @db.VarChar(20)
+  name        String         @db.VarChar(50)
+  gender      String         @db.VarChar(4)
+  phone       String         @db.VarChar(20)
+  email       String?        @db.VarChar(100)
+  address     String?        @db.VarChar(200)
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+  borrowRecords BorrowRecord[]
+
+  @@map("reader")
+}
+
+model BorrowRecord {
+  id         Int       @id @default(autoincrement()) @map("id")
+  bookId     Int       @map("book_id")
+  readerId   Int       @map("reader_id")
+  borrowDate DateTime  @map("borrow_date") @db.Date
+  dueDate    DateTime  @map("due_date") @db.Date
+  returnDate DateTime? @map("return_date") @db.Date
+  status     String    @default("borrowed") @db.VarChar(10)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  book       Book      @relation(fields: [bookId], references: [id])
+  reader     Reader    @relation(fields: [readerId], references: [id])
+
+  @@map("borrow_record")
+}

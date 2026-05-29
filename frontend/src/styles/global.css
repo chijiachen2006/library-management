@@ -1,0 +1,274 @@
+/* ===== 图书管理系统 - 高级设计系统 =====
+ * 参考: Threads (Interactive, Gradient, Minimal)
+ *       Compound (Animation, Clean, Light)
+ */
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+
+  /* Neutral palette - Compound-style light */
+  --bg-root: #fafbfc;
+  --bg-surface: #ffffff;
+  --bg-hover: #f4f5f7;
+  --bg-active: #eaecf0;
+
+  /* Text */
+  --text-primary: #0d1117;
+  --text-secondary: #57606a;
+  --text-tertiary: #8b949e;
+  --text-placeholder: #afb8c1;
+
+  /* Accent - subtle indigo */
+  --accent: #5b5fe3;
+  --accent-hover: #4a4ed4;
+  --accent-subtle: rgba(91,95,227,0.06);
+  --accent-border: rgba(91,95,227,0.15);
+
+  /* Semantic */
+  --success: #1aab6b;
+  --success-subtle: rgba(26,171,107,0.06);
+  --warning: #d4870a;
+  --warning-subtle: rgba(212,135,10,0.06);
+  --danger: #e03e3e;
+  --danger-subtle: rgba(224,62,62,0.06);
+
+  /* Borders */
+  --border-default: rgba(0,0,0,0.06);
+  --border-hover: rgba(0,0,0,0.1);
+
+  /* Shadows - very subtle, Compound-style */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-xl: 0 20px 48px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+
+  /* Radius */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-root);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.011em;
+  line-height: 1.5;
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.18); }
+
+/* ===== Element Plus overrides ===== */
+.el-table {
+  --el-table-border-color: var(--border-default);
+  --el-table-header-bg-color: transparent;
+  --el-table-row-hover-bg-color: var(--bg-hover);
+  font-size: 13.5px;
+}
+
+.el-table th.el-table__cell {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.el-table td.el-table__cell {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.el-table__row {
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.el-table--striped .el-table__row--striped td.el-table__cell {
+  background: rgba(0,0,0,0.012);
+}
+
+/* Input */
+.el-input__wrapper {
+  border-radius: var(--radius-sm) !important;
+  box-shadow: var(--shadow-xs) !important;
+  border: 1px solid var(--border-default) !important;
+  transition: all var(--duration-fast) var(--ease-out) !important;
+  background: var(--bg-surface) !important;
+}
+.el-input__wrapper:hover { border-color: var(--border-hover) !important; }
+.el-input__wrapper.is-focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-subtle) !important;
+}
+
+/* Select */
+.el-select .el-input__wrapper { border-radius: var(--radius-sm) !important; }
+
+/* Button */
+.el-button {
+  border-radius: var(--radius-sm) !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+  transition: all var(--duration-fast) var(--ease-out) !important;
+}
+
+/* Tag */
+.el-tag {
+  border-radius: var(--radius-xs) !important;
+  font-weight: 500 !important;
+  font-size: 11.5px !important;
+  padding: 2px 10px !important;
+}
+
+/* Pagination */
+.el-pagination .el-pager li {
+  border-radius: var(--radius-xs) !important;
+  font-weight: 500 !important;
+}
+.el-pagination .btn-prev, .el-pagination .btn-next {
+  border-radius: var(--radius-xs) !important;
+}
+
+/* Dialog */
+.el-dialog {
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-xl) !important;
+}
+.el-dialog__header { padding: 24px 28px 0 !important; }
+.el-dialog__body { padding: 20px 28px 24px !important; }
+.el-dialog__footer { padding: 0 28px 24px !important; }
+
+/* Radio */
+.el-radio__inner {
+  border-radius: 50% !important;
+  transition: all var(--duration-fast) var(--ease-out) !important;
+}
+
+/* Date picker */
+.el-date-editor .el-input__wrapper {
+  border-radius: var(--radius-sm) !important;
+}
+
+/* ===== Page transitions ===== */
+.page-enter-active {
+  animation: pageIn var(--duration-slow) var(--ease-out);
+}
+.page-leave-active {
+  animation: pageOut 180ms var(--ease-in-out);
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.995); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes pageOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-6px); }
+}
+
+/* ===== Fade in animation ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+/* ===== Skeleton pulse ===== */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-hover) 25%, var(--bg-active) 50%, var(--bg-hover) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-xs);
+}
+
+/* ===== Primary gradient button ===== */
+.btn-primary {
+  background: var(--accent) !important;
+  border: none !important;
+  color: #fff !important;
+  font-weight: 500 !important;
+  border-radius: var(--radius-sm) !important;
+  transition: all var(--duration-fast) var(--ease-out) !important;
+  box-shadow: 0 1px 2px rgba(91,95,227,0.2) !important;
+}
+.btn-primary:hover {
+  background: var(--accent-hover) !important;
+  box-shadow: 0 4px 12px rgba(91,95,227,0.3) !important;
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ===== Secondary outline button ===== */
+.btn-secondary {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-default) !important;
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+  border-radius: var(--radius-sm) !important;
+  transition: all var(--duration-fast) var(--ease-out) !important;
+}
+.btn-secondary:hover {
+  border-color: var(--border-hover) !important;
+  background: var(--bg-hover) !important;
+}
+
+/* ===== Glass surface card ===== */
+.surface-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+.surface-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== Search bar card ===== */
+.search-bar {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+/* ===== Table card ===== */
+.table-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 4px;
+  box-shadow: var(--shadow-xs);
+}
